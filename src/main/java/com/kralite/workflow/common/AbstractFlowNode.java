@@ -24,11 +24,6 @@ public abstract class AbstractFlowNode {
     protected String id;
     protected Map<String, Object> props;
 
-    // 动态属性
-    protected Map<String, Object> inParams;
-    protected Map<String, Object> outParams;
-    protected NodeStatus status;
-
     public String getId() {
         return id;
     }
@@ -61,22 +56,6 @@ public abstract class AbstractFlowNode {
         this.outParamTypeMap = outParamTypeMap;
     }
 
-    public Map<String, Object> getInParams() {
-        return inParams;
-    }
-
-    public void setInParams(Map<String, Object> inParams) {
-        this.inParams = inParams;
-    }
-
-    public Map<String, Object> getOutParams() {
-        return outParams;
-    }
-
-    public void setOutParams(Map<String, Object> outParams) {
-        this.outParams = outParams;
-    }
-
     public Map<String, Object> getProps() {
         return props;
     }
@@ -85,13 +64,5 @@ public abstract class AbstractFlowNode {
         this.props = props;
     }
 
-    public NodeStatus getStatus() {
-        return status;
-    }
-
-    public void setStatus(NodeStatus status) {
-        this.status = status;
-    }
-
-    abstract public void execute();
+    abstract protected Map<String, Object> execute(Map<String, Object> inParams);
 }

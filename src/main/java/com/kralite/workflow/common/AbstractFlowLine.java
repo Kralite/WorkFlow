@@ -8,14 +8,10 @@ import java.util.Map;
  */
 public abstract class AbstractFlowLine {
     protected String id;
-    protected String startNodeId;
-    protected String endNodeId;
+    protected FlowNode startNode;
+    protected FlowNode endNode;
     protected boolean isParallel;
     protected List<Pipeline> pipelines;
-
-    protected Map<String, Object> startParams;
-    protected Map<String, Object> endParams;
-    protected LineStatus status;
 
     public String getId() {
         return id;
@@ -25,20 +21,20 @@ public abstract class AbstractFlowLine {
         this.id = id;
     }
 
-    public String getStartNodeId() {
-        return startNodeId;
+    public FlowNode getStartNode() {
+        return startNode;
     }
 
-    public void setStartNodeId(String startNodeId) {
-        this.startNodeId = startNodeId;
+    public void setStartNode(FlowNode startNode) {
+        this.startNode = startNode;
     }
 
-    public String getEndNodeId() {
-        return endNodeId;
+    public FlowNode getEndNode() {
+        return endNode;
     }
 
-    public void setEndNodeId(String endNodeId) {
-        this.endNodeId = endNodeId;
+    public void setEndNode(FlowNode endNode) {
+        this.endNode = endNode;
     }
 
     public boolean isParallel() {
@@ -57,27 +53,4 @@ public abstract class AbstractFlowLine {
         this.pipelines = pipelines;
     }
 
-    public Map<String, Object> getStartParams() {
-        return startParams;
-    }
-
-    public void setStartParams(Map<String, Object> startParams) {
-        this.startParams = startParams;
-    }
-
-    public Map<String, Object> getEndParams() {
-        return endParams;
-    }
-
-    public void setEndParams(Map<String, Object> endParams) {
-        this.endParams = endParams;
-    }
-
-    public LineStatus getStatus() {
-        return status;
-    }
-
-    public void setStatus(LineStatus status) {
-        this.status = status;
-    }
 }

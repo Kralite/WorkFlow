@@ -7,6 +7,7 @@ import com.kralite.workflow.annotation.ParamType;
 import com.kralite.workflow.common.FlowNode;
 
 import java.util.Date;
+import java.util.Map;
 
 /**
  * Created by Kralite on 2019/1/20.
@@ -22,8 +23,9 @@ import java.util.Date;
 })
 public class PrintNode extends FlowNode{
     @Override
-    public void execute(){
+    public Map<String, Object> execute(Map<String, Object> inParams){
         System.out.println(id + " " + nodeTypeName + inParamTypeMap.get("printMsg").getParamClass());
+        return null;
     }
 
 }

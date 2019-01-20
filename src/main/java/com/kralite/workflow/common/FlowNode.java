@@ -5,7 +5,6 @@ import com.kralite.workflow.annotation.NodeTypeName;
 import com.kralite.workflow.annotation.OutParamTypes;
 import com.kralite.workflow.annotation.ParamType;
 import com.kralite.workflow.exception.InitFlowException;
-import org.apache.log4j.Logger;
 
 import java.util.Map;
 
@@ -17,13 +16,10 @@ public class FlowNode extends AbstractFlowNode{
 
     protected FlowNode(){}
 
-    public static FlowNode getNode(String id, Map props, Map inParamTypeMap, NodeStatus status,
-                                   Map outParamTypeMap, Map inParams, Map outParams){
+    public static FlowNode getNode(String id, Map props, Map inParamTypeMap, Map outParamTypeMap){
         FlowNode node = new FlowNode();
         node.setId(id);
         node.setProps(props);
-        node.setInParams(inParams);
-        node.setOutParams(outParams);
         node.setInParamTypeMap(inParamTypeMap);
         node.setOutParamTypeMap(outParamTypeMap);
         node.initNode();
@@ -31,7 +27,7 @@ public class FlowNode extends AbstractFlowNode{
     }
 
     @Override
-    public void execute(){}
+    public Map<String, Object> execute(Map<String, Object> inParams){return null;}
 
     public void initNode(){
         initAnnotaion_NodeTypeParam();
@@ -89,7 +85,7 @@ public class FlowNode extends AbstractFlowNode{
         }
     }
 
-    private String nodeLogName(){
+    public String nodeLogName(){
         return nodeTypeName+" - "+id;
     }
 }
