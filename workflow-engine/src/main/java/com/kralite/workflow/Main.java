@@ -17,7 +17,6 @@ public class Main {
         printNode.setInParamTypeMap(new HashMap<String, ParamTypeInfo>());
         printNode.setOutParamTypeMap(new HashMap<String, ParamTypeInfo>());
         printNode.initNode();
-        printNode.execute();
 
     }
 }
