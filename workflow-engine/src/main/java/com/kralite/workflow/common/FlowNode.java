@@ -5,37 +5,35 @@ import com.kralite.workflow.annotation.NodeTypeName;
 import com.kralite.workflow.annotation.OutParamTypes;
 import com.kralite.workflow.annotation.ParamType;
 import com.kralite.workflow.exception.InitFlowException;
+import com.kralite.workflow.exception.RunningFlowException;
 
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Created by Kralite on 2019/1/20.
  */
-
+@NodeTypeName("DefaultNode")
 public class FlowNode extends AbstractFlowNode{
 
-    protected FlowNode(){}
-
-    public static FlowNode getNode(String id, Map props, Map inParamTypeMap, Map outParamTypeMap){
-        FlowNode node = new FlowNode();
-        node.setId(id);
-        node.setProps(props);
-        node.setInParamTypeMap(inParamTypeMap);
-        node.setOutParamTypeMap(outParamTypeMap);
-        node.initNode();
-        return node;
-    }
-
     @Override
-    public Map<String, Object> execute(Map<String, Object> inParams){return null;}
+    protected Map<String, Object> execute(Map<String, Object> inParams){return null;}
 
-    public void initNode(){
+    public final void initNode(){
         initAnnotaion_NodeTypeParam();
         initAnnotaion_InParamTypes();
         initAnnotaion_OutParamTypes();
     }
 
-    private void initAnnotaion_NodeTypeParam() {
+    public void putProperty(String key, Object value) {
+        props.put(key, value);
+    }
+
+    public Object getProperty(String key) {
+        return props.get(key);
+    }
+
+    private final void initAnnotaion_NodeTypeParam() {
         Class clazz = this.getClass();
         boolean isExist = clazz.isAnnotationPresent(NodeTypeName.class);
         if(isExist) {
@@ -45,14 +43,13 @@ public class FlowNode extends AbstractFlowNode{
         }
         else {
             throw new InitFlowException(
-                    "FlowNode ["+nodeLogName()+"] init failed, annotation NodeTypeName can't be null");
+                    "FlowNode ["+id+"] init failed, annotation NodeTypeName can't be null");
         }
     }
 
-    private void initAnnotaion_InParamTypes() {
+    private final void initAnnotaion_InParamTypes() {
         if (inParamTypeMap == null) {
-            throw new InitFlowException(
-                    "FlowNode ["+nodeLogName()+"] init failed, its inParamTypeMap is null" );
+            inParamTypeMap = new ConcurrentHashMap<>();
         }
         Class clazz = this.getClass();
         boolean isExist = clazz.isAnnotationPresent(InParamTypes.class);
@@ -67,10 +64,9 @@ public class FlowNode extends AbstractFlowNode{
         }
     }
 
-    private void initAnnotaion_OutParamTypes() {
+    private final void initAnnotaion_OutParamTypes() {
         if (outParamTypeMap == null) {
-            throw new InitFlowException(
-                    "FlowNode ["+nodeLogName()+"] init failed, its outParamTypeMap is null" );
+            outParamTypeMap = new ConcurrentHashMap<>();
         }
         Class clazz = this.getClass();
         boolean isExist = clazz.isAnnotationPresent(OutParamTypes.class);

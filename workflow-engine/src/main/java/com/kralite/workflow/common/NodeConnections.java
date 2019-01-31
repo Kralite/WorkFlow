@@ -1,5 +1,6 @@
 package com.kralite.workflow.common;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -12,7 +13,13 @@ public class NodeConnections {
 
     public NodeConnections(FlowNode flowNode, List<FlowLine> inlines, List<FlowLine> outlines) {
         this.flowNode = flowNode;
+        if (inlines == null) {
+            inlines = new ArrayList<>();
+        }
         this.inlines = inlines;
+        if (outlines == null) {
+            outlines = new ArrayList<>();
+        }
         this.outlines = outlines;
     }
 

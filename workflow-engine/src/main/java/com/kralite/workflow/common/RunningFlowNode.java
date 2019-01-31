@@ -5,6 +5,7 @@ import org.apache.log4j.Logger;
 
 import java.util.Date;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Created by ChenDaLin on 2019/1/20.
@@ -31,8 +32,8 @@ public class RunningFlowNode{
         }
         validateParams(inParams, flowNode.getInParamTypeMap(), "in");
         outParams = flowNode.execute(inParams);
+        if (outParams == null) { outParams = new ConcurrentHashMap<>();}
         validateParams(outParams, flowNode.getOutParamTypeMap(), "out");
-        status.addRunRecord(new Date());
     }
 
     private void validateParams(Map<String, Object> params, Map<String, ParamTypeInfo> paramTypes, String step){
@@ -41,20 +42,27 @@ public class RunningFlowNode{
             ParamTypeInfo paramTypeInfo = paramTypeEntry.getValue();
             // 参数是必需的
             if (paramTypeInfo.isRequired()) {
-                // 入参中有该参数且不为空
+                // 入参中有该参数（可能是null的）
                 if (params.containsKey(paramName) && params.get(paramName) != null){
-                    // 类型检查通过
-                    if (paramTypeInfo.getParamClass().isInstance(params.get(paramName))) {
-                        // pass
+                    // 该参数不为空
+                    if (params.get(paramName) != null) {
+                        // 类型检查通过
+                        if (paramTypeInfo.getParamClass().isInstance(params.get(paramName))) {
+                            // pass
+                        }
+                        // 类型检查不过
+                        else {
+                            throw new RunningFlowException(
+                                    "RunningFlowNode ["+flowNode.nodeLogName()+"] "+step+"Param "+paramName+"'s class should be " +
+                                            paramTypeInfo.getParamClass().getCanonicalName() + ", but it's " + params.get(paramName).getClass().getCanonicalName());
+                        }
                     }
-                    // 类型检查不过
+                    // 入参中有该参数但为null，不做类型判断
                     else {
-                        throw new RunningFlowException(
-                                "RunningFlowNode ["+flowNode.nodeLogName()+"] "+step+"Param "+paramName+"'s class should be " +
-                                        paramTypeInfo.getParamClass().getCanonicalName() + ", but it's " + params.get(paramName).getClass().getCanonicalName());
+                        //pass
                     }
                 }
-                // 入参中无该参数或为空
+                // 入参中无该参数
                 else {
                     throw new RunningFlowException(
                             "RunningFlowNode ["+flowNode.nodeLogName()+"] necessary "+step+"Param "+paramName+"=null" );
@@ -79,19 +87,6 @@ public class RunningFlowNode{
                 }
             }
         }
-    }
-
-    public boolean isReady(){
-        for(Map.Entry<String, ParamTypeInfo> paramTypeEntry: flowNode.getInParamTypeMap().entrySet()) {
-            String paramName = paramTypeEntry.getKey();
-            ParamTypeInfo paramTypeInfo = paramTypeEntry.getValue();
-            // 参数是必需的，但是入参中没有该参数或该参数值为null，就不ready
-            if (paramTypeInfo.isRequired() && (!inParams.containsKey(paramName) || inParams.get(paramName)==null)) {
-                return false;
-            }
-        }
-        return true;
-
     }
 
     public FlowNode getFlowNode() {

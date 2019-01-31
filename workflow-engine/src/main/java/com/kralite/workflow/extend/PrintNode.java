@@ -15,16 +15,22 @@ import java.util.Map;
 
 @NodeTypeName("PrintNode")
 @InParamTypes({
-        @ParamType(paramName = "printMsg", paramClass = String.class),
-        @ParamType(paramName = "time", paramClass = Date.class)
+        @ParamType(paramName = "printMsg", paramClass = Object.class, required = false),
+        @ParamType(paramName = "time", paramClass = Date.class, required = false)
 })
 @OutParamTypes({
-        @ParamType(paramName = "printMsg", paramClass = String.class)
+        @ParamType(paramName = "printMsg", paramClass = Object.class, required = false)
 })
 public class PrintNode extends FlowNode{
     @Override
     public Map<String, Object> execute(Map<String, Object> inParams){
-        System.out.println(id + " " + nodeTypeName + inParamTypeMap.get("printMsg").getParamClass());
+//        System.out.println(id + " " + nodeTypeName + inParamTypeMap.get("printMsg").getParamClass());
+        if (props.containsKey("defaultMsg")){
+            System.out.println("[PrintNode - " + id + "] property message: " + props.get("defaultMsg"));
+        }
+        if (inParams.containsKey("printMsg")){
+            System.out.println("[PrintNode - " + id + "] param message: " + inParams.get("printMsg"));
+        }
         return null;
     }
 

@@ -8,8 +8,8 @@ import java.util.Map;
  */
 public abstract class AbstractFlowLine {
     protected String id;
-    protected FlowNode startNode;
-    protected FlowNode endNode;
+    protected String startNodeId;
+    protected String endNodeId;
     protected boolean isParallel;
     protected List<Pipeline> pipelines;
 
@@ -21,20 +21,20 @@ public abstract class AbstractFlowLine {
         this.id = id;
     }
 
-    public FlowNode getStartNode() {
-        return startNode;
+    public String getStartNodeId() {
+        return startNodeId;
     }
 
-    public void setStartNode(FlowNode startNode) {
-        this.startNode = startNode;
+    public void setStartNodeId(String startNodeId) {
+        this.startNodeId = startNodeId;
     }
 
-    public FlowNode getEndNode() {
-        return endNode;
+    public String getEndNodeId() {
+        return endNodeId;
     }
 
-    public void setEndNode(FlowNode endNode) {
-        this.endNode = endNode;
+    public void setEndNodeId(String endNodeId) {
+        this.endNodeId = endNodeId;
     }
 
     public boolean isParallel() {
