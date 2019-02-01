@@ -4,6 +4,7 @@ import com.kralite.workflow.exception.RunningFlowException;
 import org.apache.log4j.Logger;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -32,7 +33,7 @@ public class RunningFlowNode{
         }
         validateParams(inParams, flowNode.getInParamTypeMap(), "in");
         outParams = flowNode.execute(inParams);
-        if (outParams == null) { outParams = new ConcurrentHashMap<>();}
+        if (outParams == null) { outParams = new HashMap<>();}
         validateParams(outParams, flowNode.getOutParamTypeMap(), "out");
     }
 
@@ -43,7 +44,7 @@ public class RunningFlowNode{
             // 参数是必需的
             if (paramTypeInfo.isRequired()) {
                 // 入参中有该参数（可能是null的）
-                if (params.containsKey(paramName) && params.get(paramName) != null){
+                if (params.containsKey(paramName)){
                     // 该参数不为空
                     if (params.get(paramName) != null) {
                         // 类型检查通过
@@ -65,7 +66,7 @@ public class RunningFlowNode{
                 // 入参中无该参数
                 else {
                     throw new RunningFlowException(
-                            "RunningFlowNode ["+flowNode.nodeLogName()+"] necessary "+step+"Param "+paramName+"=null" );
+                            "RunningFlowNode ["+flowNode.nodeLogName()+"] necessary "+step+"Param "+paramName+" isn't exists." );
                 }
             }
             // 参数不是必需的

@@ -1,11 +1,13 @@
 package com.kralite.workflow.common;
 
 import com.kralite.workflow.annotation.NodeTypeName;
+import com.kralite.workflow.annotation.ParamType;
 import com.kralite.workflow.exception.RunningFlowException;
 import org.reflections.Reflections;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -24,15 +26,16 @@ public class FlowNodeBuilder {
         buildNodeTypeMap();
     }
 
-    static public FlowNode buildNode(String nodeType, String id, Map<String, Object> props){
+    static public FlowNode buildNode(String nodeType, String id, Map<String, String> props) {
+        return buildNode(nodeType, id, props, null, null);
+    }
+
+    static public FlowNode buildNode(String nodeType, String id, Map<String, String> props, Map<String, ParamTypeInfo> extendedInParamTypes,  Map<String, ParamTypeInfo> extendedOutParamTypes){
         if (!nodeTypeMap.containsKey(nodeType)) {
             throw new RunningFlowException("Node type name '" + nodeType + "' doesn't exist");
         }
         if (id == null) {
             throw new RunningFlowException(nodeType + "'s Node id can't be null");
-        }
-        if (props == null) {
-            props = new ConcurrentHashMap<String, Object>();
         }
 
         Class nodeTypeClass = nodeTypeMap.get(nodeType);
@@ -40,8 +43,18 @@ public class FlowNodeBuilder {
             Constructor defaultConstructor = nodeTypeClass.getConstructor();
             FlowNode newNode = (FlowNode)defaultConstructor.newInstance();
             newNode.setId(id);
-            newNode.setProps(props);
-            newNode.initNode();
+            newNode.initNode(props);
+            // 通过流程配置文件添加的输入/输出参数（不是在类注解中定义的）
+            if (extendedInParamTypes != null) {
+                for (Map.Entry<String, ParamTypeInfo> inTypeEntry: extendedInParamTypes.entrySet()) {
+                    newNode.putInParamType(inTypeEntry.getKey(), inTypeEntry.getValue());
+                }
+            }
+            if (extendedOutParamTypes != null) {
+                for (Map.Entry<String, ParamTypeInfo> outTypeEntry: extendedOutParamTypes.entrySet()) {
+                    newNode.putOutParamType(outTypeEntry.getKey(), outTypeEntry.getValue());
+                }
+            }
             return newNode;
         } catch (NoSuchMethodException nme) {
             throw new RunningFlowException(nodeTypeClass.getCanonicalName() + " doesn't have default constructor");

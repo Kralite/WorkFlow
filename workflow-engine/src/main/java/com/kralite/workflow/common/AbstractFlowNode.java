@@ -1,10 +1,5 @@
 package com.kralite.workflow.common;
 
-import com.kralite.workflow.annotation.InParamTypes;
-import com.kralite.workflow.annotation.NodeTypeName;
-import com.kralite.workflow.annotation.OutParamTypes;
-import com.kralite.workflow.annotation.ParamType;
-import com.kralite.workflow.exception.InitFlowException;
 import org.apache.log4j.Logger;
 
 import java.util.Map;
@@ -22,7 +17,8 @@ public abstract class AbstractFlowNode {
 
     // 静态属性
     protected String id;
-    protected Map<String, Object> props;
+    protected Map<String, PropInfo> propTypes;
+    protected Map<String, String> props;
 
     public String getId() {
         return id;
@@ -56,11 +52,11 @@ public abstract class AbstractFlowNode {
         this.outParamTypeMap = outParamTypeMap;
     }
 
-    public Map<String, Object> getProps() {
+    public Map<String, String> getProps() {
         return props;
     }
 
-    public void setProps(Map<String, Object> props) {
+    public void setProps(Map<String, String> props) {
         this.props = props;
     }
 

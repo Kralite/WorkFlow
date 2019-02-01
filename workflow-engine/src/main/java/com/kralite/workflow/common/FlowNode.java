@@ -1,14 +1,11 @@
 package com.kralite.workflow.common;
 
-import com.kralite.workflow.annotation.InParamTypes;
-import com.kralite.workflow.annotation.NodeTypeName;
-import com.kralite.workflow.annotation.OutParamTypes;
-import com.kralite.workflow.annotation.ParamType;
+import com.kralite.workflow.annotation.*;
 import com.kralite.workflow.exception.InitFlowException;
 import com.kralite.workflow.exception.RunningFlowException;
 
+import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Created by Kralite on 2019/1/20.
@@ -19,19 +16,27 @@ public class FlowNode extends AbstractFlowNode{
     @Override
     protected Map<String, Object> execute(Map<String, Object> inParams){return null;}
 
-    public final void initNode(){
+    public final void initNode(Map<String, String> props){
         initAnnotaion_NodeTypeParam();
         initAnnotaion_InParamTypes();
         initAnnotaion_OutParamTypes();
+        initAnnotaion_PropTypes();
+        if (props == null) {props = new HashMap<>();}
+        validatePropTypes(props);
+        this.props = props;
     }
 
-    public void putProperty(String key, Object value) {
-        props.put(key, value);
-    }
+//    public void putProperty(String key, Object value) {
+//        props.put(key, value);
+//    }
 
     public Object getProperty(String key) {
         return props.get(key);
     }
+
+    public void putInParamType(String key, ParamTypeInfo paramTypeInfo) {inParamTypeMap.put(key, paramTypeInfo);}
+
+    public void putOutParamType(String key, ParamTypeInfo paramTypeInfo) {outParamTypeMap.put(key, paramTypeInfo);}
 
     private final void initAnnotaion_NodeTypeParam() {
         Class clazz = this.getClass();
@@ -47,9 +52,26 @@ public class FlowNode extends AbstractFlowNode{
         }
     }
 
+    private final void initAnnotaion_PropTypes() {
+        if (propTypes == null) {
+            propTypes = new HashMap<>();
+        }
+        Class clazz = this.getClass();
+        boolean isExist = clazz.isAnnotationPresent(PropNames.class);
+        if(isExist) {
+            PropNames a = (PropNames)(clazz.getAnnotation(PropNames.class));
+            PropName[] types = a.value();
+            logger.info("init [" +nodeLogName()+"] annotaion PropNames:");
+            for (PropName type: types) {
+                propTypes.put(type.value(), new PropInfo(type.required()));
+                logger.info("\tparamName="+type.value()+", required="+type.required());
+            }
+        }
+    }
+
     private final void initAnnotaion_InParamTypes() {
         if (inParamTypeMap == null) {
-            inParamTypeMap = new ConcurrentHashMap<>();
+            inParamTypeMap = new HashMap<>();
         }
         Class clazz = this.getClass();
         boolean isExist = clazz.isAnnotationPresent(InParamTypes.class);
@@ -66,7 +88,7 @@ public class FlowNode extends AbstractFlowNode{
 
     private final void initAnnotaion_OutParamTypes() {
         if (outParamTypeMap == null) {
-            outParamTypeMap = new ConcurrentHashMap<>();
+            outParamTypeMap = new HashMap<>();
         }
         Class clazz = this.getClass();
         boolean isExist = clazz.isAnnotationPresent(OutParamTypes.class);
@@ -81,7 +103,31 @@ public class FlowNode extends AbstractFlowNode{
         }
     }
 
+    private final void validatePropTypes(Map<String, String> initProps) {
+
+        for(Map.Entry<String, PropInfo> propTypeEntry: propTypes.entrySet()){
+            String propName = propTypeEntry.getKey();
+            PropInfo propTypeInfo = propTypeEntry.getValue();
+            // 参数是必需的
+            if (propTypeInfo.isRequired()) {
+                // 入参中有该参数（可能是null的）
+                if (initProps.containsKey(propName)){
+                    // pass
+                }
+                // 入参中无该参数
+                else {
+                    throw new RunningFlowException(
+                            "RunningFlowNode ["+nodeLogName()+"] necessary Property '"+propName+"' doesn't exists." );
+                }
+            }
+            // 参数不是必需的
+            else {
+                // pass
+            }
+        }
+    }
+
     public String nodeLogName(){
-        return nodeTypeName+" - "+id;
+        return nodeTypeName+" : "+id;
     }
 }

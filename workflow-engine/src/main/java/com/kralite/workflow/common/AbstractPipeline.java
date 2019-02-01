@@ -2,6 +2,8 @@ package com.kralite.workflow.common;
 
 import com.kralite.workflow.exception.RunningFlowException;
 
+import java.util.Map;
+
 /**
  * Created by Kralite on 2019/1/20.
  */
@@ -12,6 +14,7 @@ public abstract class AbstractPipeline {
     protected Class startParamType;
     protected String endParamName;
     protected Class endParamType;
+    protected Map<String, Object> props;
 
     abstract protected Object transform(Object startParam);
 
@@ -53,5 +56,13 @@ public abstract class AbstractPipeline {
 
     public void setEndParamType(Class endParamType) {
         this.endParamType = endParamType;
+    }
+
+    public Map<String, Object> getProps() {
+        return props;
+    }
+
+    public void setProps(Map<String, Object> props) {
+        this.props = props;
     }
 }

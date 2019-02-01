@@ -4,6 +4,7 @@ import com.kralite.workflow.common.*;
 import com.kralite.workflow.exception.RunningFlowException;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -21,8 +22,8 @@ public class LocalMemoryDataManager implements DataManager{
         }
         RunningFlowNode rn = new RunningFlowNode(
                 flowNode,
-                new ConcurrentHashMap<String, Object>(),
-                new ConcurrentHashMap<String, Object>(),
+                new HashMap<>(),
+                new HashMap<>(),
                 new NodeStatus()
         );
         rnMap.put(flowNode.getId(), rn);
@@ -41,8 +42,8 @@ public class LocalMemoryDataManager implements DataManager{
         }
         RunningFlowLine runningFL = new RunningFlowLine(
                 flowLine,
-                new ConcurrentHashMap<>(),
-                new ConcurrentHashMap<>(),
+                new HashMap<>(),
+                new HashMap<>(),
                 new LineStatus(false));
         rlMap.put(flowLine.getId(), runningFL);
         return runningFL;

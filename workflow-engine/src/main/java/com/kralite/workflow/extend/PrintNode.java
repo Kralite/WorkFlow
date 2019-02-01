@@ -1,9 +1,6 @@
 package com.kralite.workflow.extend;
 
-import com.kralite.workflow.annotation.InParamTypes;
-import com.kralite.workflow.annotation.NodeTypeName;
-import com.kralite.workflow.annotation.OutParamTypes;
-import com.kralite.workflow.annotation.ParamType;
+import com.kralite.workflow.annotation.*;
 import com.kralite.workflow.common.FlowNode;
 
 import java.util.Date;
@@ -14,6 +11,9 @@ import java.util.Map;
  */
 
 @NodeTypeName("PrintNode")
+@PropNames({
+        @PropName(value = "defaultMsg", required = false)
+})
 @InParamTypes({
         @ParamType(paramName = "printMsg", paramClass = Object.class, required = false),
         @ParamType(paramName = "time", paramClass = Date.class, required = false)
