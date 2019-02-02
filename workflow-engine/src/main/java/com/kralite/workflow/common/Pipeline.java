@@ -1,11 +1,12 @@
 package com.kralite.workflow.common;
 
-import com.kralite.workflow.annotation.PipelineEndParamType;
-import com.kralite.workflow.annotation.PipelineStartParamType;
-import com.kralite.workflow.annotation.PipelineTypeName;
+import com.kralite.workflow.annotation.*;
 import com.kralite.workflow.exception.InitFlowException;
 import com.kralite.workflow.exception.RunningFlowException;
 import org.apache.log4j.Logger;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by Kralite on 2019/1/20.
@@ -21,10 +22,16 @@ public class Pipeline extends AbstractPipeline{
         return startParam;
     }
 
-    public void init(){
+    public void init(Map<String, String> props){
         initParamTypeName();
+        initAnnotaion_PropNames();
         initStartParamType();
         initEndParamType();
+        if (props == null) {
+            props = new HashMap<>();
+        }
+        validateProps(props);
+        this.props = props;
     }
 
     public Object executeTransform(Object startParam) throws RunningFlowException {
@@ -48,6 +55,29 @@ public class Pipeline extends AbstractPipeline{
 
     }
 
+    private final void validateProps(Map<String, String> initProps) {
+        for(Map.Entry<String, PropInfo> propTypeEntry: propNames.entrySet()){
+            String propName = propTypeEntry.getKey();
+            PropInfo propTypeInfo = propTypeEntry.getValue();
+            // 参数是必需的
+            if (propTypeInfo.isRequired()) {
+                // 入参中有该参数（可能是null的）
+                if (initProps.containsKey(propName)){
+                    // pass
+                }
+                // 入参中无该参数
+                else {
+                    throw new RunningFlowException(
+                            "Pipeline ["+id+"] necessary Property '"+propName+"' doesn't exists." );
+                }
+            }
+            // 参数不是必需的
+            else {
+                // pass
+            }
+        }
+    }
+
     private void initParamTypeName(){
         Class clazz = this.getClass();
         boolean isExist = clazz.isAnnotationPresent(PipelineTypeName.class);
@@ -59,6 +89,23 @@ public class Pipeline extends AbstractPipeline{
         else {
             throw new InitFlowException(
                     "Pipeline ["+id+"] init failed, annotation PipelineTypeName can't be null");
+        }
+    }
+
+    private final void initAnnotaion_PropNames() {
+        if (propNames == null) {
+            propNames = new HashMap<>();
+        }
+        Class clazz = this.getClass();
+        boolean isExist = clazz.isAnnotationPresent(PropNames.class);
+        if(isExist) {
+            PropNames a = (PropNames)(clazz.getAnnotation(PropNames.class));
+            PropName[] types = a.value();
+            logger.info("init [Pipeline: " +id+ "] annotaion PropNames:");
+            for (PropName type: types) {
+                propNames.put(type.value(), new PropInfo(type.required()));
+                logger.info("\tparamName="+type.value()+", required="+type.required());
+            }
         }
     }
 

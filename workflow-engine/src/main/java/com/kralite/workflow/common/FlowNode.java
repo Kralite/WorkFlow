@@ -20,7 +20,7 @@ public class FlowNode extends AbstractFlowNode{
         initAnnotaion_NodeTypeParam();
         initAnnotaion_InParamTypes();
         initAnnotaion_OutParamTypes();
-        initAnnotaion_PropTypes();
+        initAnnotaion_PropNames();
         if (props == null) {props = new HashMap<>();}
         validatePropTypes(props);
         this.props = props;
@@ -52,9 +52,9 @@ public class FlowNode extends AbstractFlowNode{
         }
     }
 
-    private final void initAnnotaion_PropTypes() {
-        if (propTypes == null) {
-            propTypes = new HashMap<>();
+    private final void initAnnotaion_PropNames() {
+        if (propNames == null) {
+            propNames = new HashMap<>();
         }
         Class clazz = this.getClass();
         boolean isExist = clazz.isAnnotationPresent(PropNames.class);
@@ -63,7 +63,7 @@ public class FlowNode extends AbstractFlowNode{
             PropName[] types = a.value();
             logger.info("init [" +nodeLogName()+"] annotaion PropNames:");
             for (PropName type: types) {
-                propTypes.put(type.value(), new PropInfo(type.required()));
+                propNames.put(type.value(), new PropInfo(type.required()));
                 logger.info("\tparamName="+type.value()+", required="+type.required());
             }
         }
@@ -104,8 +104,7 @@ public class FlowNode extends AbstractFlowNode{
     }
 
     private final void validatePropTypes(Map<String, String> initProps) {
-
-        for(Map.Entry<String, PropInfo> propTypeEntry: propTypes.entrySet()){
+        for(Map.Entry<String, PropInfo> propTypeEntry: propNames.entrySet()){
             String propName = propTypeEntry.getKey();
             PropInfo propTypeInfo = propTypeEntry.getValue();
             // 参数是必需的

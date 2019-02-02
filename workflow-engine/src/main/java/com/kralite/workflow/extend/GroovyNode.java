@@ -21,7 +21,7 @@ public class GroovyNode extends FlowNode{
         if (! props.containsKey("groovyCode")) {
             throw new RunningFlowException("GroovyNode[" + id +"] doesn't contain property 'groovyCode'");
         }
-        String groovyCode = (String)props.get("groovyCode");
+        String groovyCode = props.get("groovyCode");
 
         GroovyClassLoader groovyLoader = new GroovyClassLoader();
         Class groovyClass = groovyLoader.parseClass(groovyCode);
@@ -46,6 +46,5 @@ public class GroovyNode extends FlowNode{
             throw new RunningFlowException("GroovyNode[" + id + "] groovy code parse error:" + e.getMessage(), e);
         }
         return outParams;
-
     }
 }

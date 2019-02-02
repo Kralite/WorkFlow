@@ -17,7 +17,7 @@ public abstract class AbstractFlowNode {
 
     // 静态属性
     protected String id;
-    protected Map<String, PropInfo> propTypes;
+    protected Map<String, PropInfo> propNames;
     protected Map<String, String> props;
 
     public String getId() {

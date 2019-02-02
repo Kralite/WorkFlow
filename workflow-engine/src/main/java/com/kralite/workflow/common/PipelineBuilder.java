@@ -7,6 +7,7 @@ import org.reflections.Reflections;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -22,7 +23,7 @@ public class PipelineBuilder {
         buildPipelineTypeMap();
     }
 
-    static public Pipeline buildPipeline(String pipeLineType, String id, String startParamName, String endParamName){
+    static public Pipeline buildPipeline(String pipeLineType, String id, String startParamName, String endParamName, Map<String, String> props){
         validate(pipeLineType, id, startParamName, endParamName);
 
         Class pipelineTypeClass = pipelineTypeMap.get(pipeLineType);
@@ -32,7 +33,8 @@ public class PipelineBuilder {
             newPipeline.setId(id);
             newPipeline.setStartParamName(startParamName);
             newPipeline.setEndParamName(endParamName);
-            newPipeline.init();
+            if (props == null) {props = new HashMap<>();}
+            newPipeline.init(props);
             return newPipeline;
         } catch (NoSuchMethodException nme) {
             throw new RunningFlowException(pipelineTypeClass.getCanonicalName() + " doesn't have default constructor");

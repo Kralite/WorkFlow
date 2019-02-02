@@ -14,7 +14,8 @@ public abstract class AbstractPipeline {
     protected Class startParamType;
     protected String endParamName;
     protected Class endParamType;
-    protected Map<String, Object> props;
+    protected Map<String, PropInfo> propNames;
+    protected Map<String, String> props;
 
     abstract protected Object transform(Object startParam);
 
@@ -58,11 +59,4 @@ public abstract class AbstractPipeline {
         this.endParamType = endParamType;
     }
 
-    public Map<String, Object> getProps() {
-        return props;
-    }
-
-    public void setProps(Map<String, Object> props) {
-        this.props = props;
-    }
 }
