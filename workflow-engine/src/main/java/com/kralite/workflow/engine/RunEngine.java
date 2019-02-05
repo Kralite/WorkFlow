@@ -19,8 +19,8 @@ public class RunEngine {
     private FlowManager flowManager;
     private FlowParser flowParser;
 
-    public void loadFlow(){
-        flowManager.init(flowParser);
+    public void loadFlow(String FlowDescriptionContent){
+        flowManager.init(flowParser, FlowDescriptionContent);
     }
 
     /**

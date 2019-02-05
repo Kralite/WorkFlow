@@ -1,0 +1,96 @@
+<flow id='workflow-1' name='workflow test 1' asyn='false' >
+    <startNode id='node-start' type='DefaultNode'>
+    </startNode>
+    <nodes>
+        <node id="node-0" type="NumNode">
+            <props>
+                <prop name='value'>2</prop>
+            </props>
+        </node>
+        <node id="node-1" type="NumNode">
+            <props>
+                <prop name='value'>3</prop>
+            </props>
+        </node>
+        <node id="node-3" type="NumNode">
+            <props>
+                <prop name='value'>4</prop>
+            </props>
+        </node>
+        <node id="node-2" type="AddNode" />
+        <node id="node-4" type="GroovyNode">
+            <extendedInParams>
+                <param name='value1' class='java.lang.Double' />
+                <param name='value2' class='java.lang.Double' />
+            </extendedInParams>
+            <extendedOutParams>
+                <param name='result' class='java.lang.Double' />
+            </extendedOutParams>
+            <props>
+                <prop name='operator'>*</prop>
+                <prop name='groovyCode'>
+                    <![CDATA[
+                        def execute(Map<String, Object> inParams, Map<String, Object> props) {<br/>
+                            Map<String, Object> outParams = new HashMap<>()<br/>
+                            Double v1 = (Double)inParams.get("value1")<br/>
+                            Double v2 = (Double)inParams.get("value2")<br/>
+                            System.out.println("value1:" + v1)<br/>
+                            System.out.println("value2:" + v2)<br/>
+                            Double result;<br/>
+                            String operator = (String)props.get("operator")<br/>
+                            if (operator.equals("+")) {result = v1+v2}<br/>
+                            else if (operator.equals("-")) {result = v1-v2}<br/>
+                            else if (operator.equals("*")) {result = v1*v2}<br/>
+                            else if (operator.equals("/")) {result = v1/v2}<br/>
+                            outParams.put("result", result)<br/>
+                            return outParams<br/>
+                    }
+                    ]]>
+                </prop>
+            </props>
+        </node>
+        <node id="node-5" type="PrintNode" />
+    </nodes>
+    <lines>
+        <line id='line-0' startNode='node-start' endNode='node-0' />
+        <line id='line-1' startNode='node-start' endNode='node-1' />
+        <line id='line-2' startNode='node-start' endNode='node-3' />
+        <line id='line-3' startNode='node-0' endNode='node-2'>
+            <pipelines>
+                <pipeline id='pipe-0' type='DefaultPipeline' startParam='value' endParam='value1' />
+            </pipelines>
+        </line>
+        <line id='line-4' startNode='node-1' endNode='node-2'>
+            <pipelines>
+                <pipeline id='pipe-1' type='DefaultPipeline' startParam='value' endParam='value2' />
+            </pipelines>
+        </line>
+        <line id='line-5' startNode='node-3' endNode='node-4'>
+            <pipelines>
+                <pipeline id='pipe-2' type='GroovyPipeline' startParam='value' endParam='value1'>
+                    <props>
+                        <prop name='groovyCode'>
+                            <![CDATA[
+                            def transform(Object startParam, Map<String, String> props) {<br/>
+                            Double v1 = (Double)startParam<br/>
+                            Double endParam = v1 * 2L<br/>
+                            return endParam<br/>
+                            }
+                            ]]>
+                        </prop>
+                    </props>
+                </pipeline>
+            </pipelines>
+        </line>
+        <line id='line-6' startNode='node-2' endNode='node-4'>
+            <pipelines>
+                <pipeline id='pipe-3' type='DefaultPipeline' startParam='result' endParam='value2' />
+            </pipelines>
+        </line>
+        <line id='line-7' startNode='node-4' endNode='node-5'>
+            <pipelines>
+                <pipeline id='pipe-4' type='DefaultPipeline' startParam='result' endParam='printMsg' />
+            </pipelines>
+        </line>
+    </lines>
+</flow>

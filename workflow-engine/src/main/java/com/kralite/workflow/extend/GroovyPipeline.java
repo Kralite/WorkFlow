@@ -1,9 +1,6 @@
 package com.kralite.workflow.extend;
 
-import com.kralite.workflow.annotation.PipelineEndParamType;
-import com.kralite.workflow.annotation.PipelineStartParamType;
-import com.kralite.workflow.annotation.PipelineTypeName;
-import com.kralite.workflow.annotation.PropName;
+import com.kralite.workflow.annotation.*;
 import com.kralite.workflow.common.Pipeline;
 import com.kralite.workflow.exception.RunningFlowException;
 import groovy.lang.GroovyClassLoader;
@@ -15,7 +12,7 @@ import java.util.Map;
  * Created by ChenDaLin on 2019/2/1.
  */
 @PipelineTypeName("GroovyPipeline")
-@PropName("groovyCode")
+@PropNames({@PropName("groovyCode")})
 @PipelineStartParamType(Object.class)
 @PipelineEndParamType(Object.class)
 public class GroovyPipeline extends Pipeline {

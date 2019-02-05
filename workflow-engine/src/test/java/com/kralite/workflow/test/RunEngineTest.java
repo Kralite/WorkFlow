@@ -42,13 +42,13 @@ public class RunEngineTest extends BaseTest {
         }
 
         FlowLine[] lines = new FlowLine[7];
-        lines[0] = new FlowLine("line-0", startNode.getId(), nodes[0].getId(), false, new ArrayList<Pipeline>());
-        lines[1] = new FlowLine("line-1", startNode.getId(), nodes[1].getId(), false, new ArrayList<Pipeline>());
-        lines[2] = new FlowLine("line-2", startNode.getId(), nodes[2].getId(), false, new ArrayList<Pipeline>());
-        lines[3] = new FlowLine("line-3", nodes[0].getId(), nodes[3].getId(), false, new ArrayList<Pipeline>());
-        lines[4] = new FlowLine("line-4", nodes[1].getId(), nodes[3].getId(), false, new ArrayList<Pipeline>());
-        lines[5] = new FlowLine("line-5", nodes[1].getId(), nodes[4].getId(), false, new ArrayList<Pipeline>());
-        lines[6] = new FlowLine("line-6", nodes[2].getId(), nodes[4].getId(), false, new ArrayList<Pipeline>());
+        lines[0] = new FlowLine("line-0", startNode.getId(), nodes[0].getId(), new ArrayList<Pipeline>());
+        lines[1] = new FlowLine("line-1", startNode.getId(), nodes[1].getId(), new ArrayList<Pipeline>());
+        lines[2] = new FlowLine("line-2", startNode.getId(), nodes[2].getId(), new ArrayList<Pipeline>());
+        lines[3] = new FlowLine("line-3", nodes[0].getId(), nodes[3].getId(), new ArrayList<Pipeline>());
+        lines[4] = new FlowLine("line-4", nodes[1].getId(), nodes[3].getId(), new ArrayList<Pipeline>());
+        lines[5] = new FlowLine("line-5", nodes[1].getId(), nodes[4].getId(), new ArrayList<Pipeline>());
+        lines[6] = new FlowLine("line-6", nodes[2].getId(), nodes[4].getId(), new ArrayList<Pipeline>());
         for (int i=0; i<lines.length; ++i) {
             flowManager.addLine(lines[i].getId(), lines[i]);
         }
@@ -87,19 +87,19 @@ public class RunEngineTest extends BaseTest {
         nodes[5] = FlowNodeBuilder.buildNode("PrintNode", "node-5", null);
 
         FlowLine[] lines = new FlowLine[8];
-        lines[0] = new FlowLine("line-0", startNode.getId(), nodes[0].getId(), false, new ArrayList<Pipeline>());
-        lines[1] = new FlowLine("line-1", startNode.getId(), nodes[1].getId(), false, new ArrayList<Pipeline>());
-        lines[2] = new FlowLine("line-2", startNode.getId(), nodes[3].getId(), false, new ArrayList<Pipeline>());
+        lines[0] = new FlowLine("line-0", startNode.getId(), nodes[0].getId(), new ArrayList<Pipeline>());
+        lines[1] = new FlowLine("line-1", startNode.getId(), nodes[1].getId(), new ArrayList<Pipeline>());
+        lines[2] = new FlowLine("line-2", startNode.getId(), nodes[3].getId(), new ArrayList<Pipeline>());
         Pipeline pipeline31 = PipelineBuilder.buildPipeline("DefaultPipeline", "line-3-pipe-1", "value", "value1", null);
-        lines[3] = new FlowLine("line-3", nodes[0].getId(), nodes[2].getId(), false, Arrays.asList(pipeline31));
+        lines[3] = new FlowLine("line-3", nodes[0].getId(), nodes[2].getId(), Arrays.asList(pipeline31));
         Pipeline pipeline41 = PipelineBuilder.buildPipeline("DefaultPipeline", "line-4-pipe-1", "value", "value2", null);
-        lines[4] = new FlowLine("line-4", nodes[1].getId(), nodes[2].getId(), false, Arrays.asList(pipeline41));
+        lines[4] = new FlowLine("line-4", nodes[1].getId(), nodes[2].getId(), Arrays.asList(pipeline41));
         Pipeline pipeline51 = PipelineBuilder.buildPipeline("DefaultPipeline", "line-5-pipe-1", "value", "value1", null);
-        lines[5] = new FlowLine("line-5", nodes[3].getId(), nodes[4].getId(), false, Arrays.asList(pipeline51));
+        lines[5] = new FlowLine("line-5", nodes[3].getId(), nodes[4].getId(), Arrays.asList(pipeline51));
         Pipeline pipeline61 = PipelineBuilder.buildPipeline("DefaultPipeline", "line-6-pipe-1", "result", "value2", null);
-        lines[6] = new FlowLine("line-6", nodes[2].getId(), nodes[4].getId(), false, Arrays.asList(pipeline61));
+        lines[6] = new FlowLine("line-6", nodes[2].getId(), nodes[4].getId(), Arrays.asList(pipeline61));
         Pipeline pipeline71 = PipelineBuilder.buildPipeline("DefaultPipeline", "line-7-pipe-1", "result", "printMsg", null);
-        lines[7] = new FlowLine("line-7", nodes[4].getId(), nodes[5].getId(), false, Arrays.asList(pipeline71));
+        lines[7] = new FlowLine("line-7", nodes[4].getId(), nodes[5].getId(), Arrays.asList(pipeline71));
         for (int i=0; i<lines.length; ++i) {
             flowManager.addLine(lines[i].getId(), lines[i]);
         }
@@ -154,21 +154,21 @@ public class RunEngineTest extends BaseTest {
         nodes[5] = FlowNodeBuilder.buildNode("PrintNode", "node-5", null);
 
         FlowLine[] lines = new FlowLine[8];
-        lines[0] = new FlowLine("line-0", startNode.getId(), nodes[0].getId(), false, new ArrayList<Pipeline>());
-        lines[1] = new FlowLine("line-1", startNode.getId(), nodes[1].getId(), false, new ArrayList<Pipeline>());
-        lines[2] = new FlowLine("line-2", startNode.getId(), nodes[3].getId(), false, new ArrayList<Pipeline>());
+        lines[0] = new FlowLine("line-0", startNode.getId(), nodes[0].getId(), new ArrayList<Pipeline>());
+        lines[1] = new FlowLine("line-1", startNode.getId(), nodes[1].getId(), new ArrayList<Pipeline>());
+        lines[2] = new FlowLine("line-2", startNode.getId(), nodes[3].getId(), new ArrayList<Pipeline>());
         String pipelineCode = "def transform(Object startParam, Map<String, String> props) {\nDouble v1 = (Double)startParam\nDouble endParam = v1 * 2L\nreturn endParam\n}";
         Pipeline pipeline31 = PipelineBuilder.buildPipeline("GroovyPipeline", "line-3-pipe-1", "value", "value1", TestUtil.asMap("groovyCode", pipelineCode));
 //        Pipeline pipeline31 = PipelineBuilder.buildPipeline("DefaultPipeline", "line-3-pipe-1", "value", "value1", null);
-        lines[3] = new FlowLine("line-3", nodes[0].getId(), nodes[2].getId(), false, Arrays.asList(pipeline31));
+        lines[3] = new FlowLine("line-3", nodes[0].getId(), nodes[2].getId(), Arrays.asList(pipeline31));
         Pipeline pipeline41 = PipelineBuilder.buildPipeline("DefaultPipeline", "line-4-pipe-1", "value", "value2", null);
-        lines[4] = new FlowLine("line-4", nodes[1].getId(), nodes[2].getId(), false, Arrays.asList(pipeline41));
+        lines[4] = new FlowLine("line-4", nodes[1].getId(), nodes[2].getId(), Arrays.asList(pipeline41));
         Pipeline pipeline51 = PipelineBuilder.buildPipeline("DefaultPipeline", "line-5-pipe-1", "value", "value1", null);
-        lines[5] = new FlowLine("line-5", nodes[3].getId(), nodes[4].getId(), false, Arrays.asList(pipeline51));
+        lines[5] = new FlowLine("line-5", nodes[3].getId(), nodes[4].getId(), Arrays.asList(pipeline51));
         Pipeline pipeline61 = PipelineBuilder.buildPipeline("DefaultPipeline", "line-6-pipe-1", "result", "value2", null);
-        lines[6] = new FlowLine("line-6", nodes[2].getId(), nodes[4].getId(), false, Arrays.asList(pipeline61));
+        lines[6] = new FlowLine("line-6", nodes[2].getId(), nodes[4].getId(), Arrays.asList(pipeline61));
         Pipeline pipeline71 = PipelineBuilder.buildPipeline("DefaultPipeline", "line-7-pipe-1", "result", "printMsg", null);
-        lines[7] = new FlowLine("line-7", nodes[4].getId(), nodes[5].getId(), false, Arrays.asList(pipeline71));
+        lines[7] = new FlowLine("line-7", nodes[4].getId(), nodes[5].getId(), Arrays.asList(pipeline71));
         for (int i=0; i<lines.length; ++i) {
             flowManager.addLine(lines[i].getId(), lines[i]);
         }

@@ -1,0 +1,28 @@
+<flow id='workflow-1' name='workflow test 1' asyn='false' >
+    <startNode id='node-start' type='DefaultNode'>
+    </startNode>
+    <nodes>
+        <node id='' type=''>
+            <props>
+                <prop name='' value=''/>
+            </props>
+            <extendedInParams>
+                <param name='' class='' required='false' />
+            </extendedInParams>
+            <extendedOutParams>
+                <param name='' class='' required='false' />
+            </extendedOutParams>
+        </node>
+    </nodes>
+    <lines>
+        <line id='' startNode='' endNode=''>
+            <pipelines>
+                <pipeline id='' type='' startParam='' endParam=''>
+                    <props>
+                        <prop name='' value=''/>
+                    </props>
+                </pipeline>
+            </pipelines>
+        </line>
+    </lines>
+</flow>

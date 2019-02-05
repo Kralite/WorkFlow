@@ -14,7 +14,7 @@
 
     <bean id="dataManager" class="com.kralite.workflow.manager.LocalMemoryDataManager"></bean>
     <bean id="flowManager" class="com.kralite.workflow.manager.DefaultFlowManager"></bean>
-    <bean id="flowParser" class="com.kralite.workflow.parser.DefaultFlowParser"></bean>
+    <bean id="flowParser" class="com.kralite.workflow.parser.DefaultXMLFlowParser"></bean>
 </beans>
 
 

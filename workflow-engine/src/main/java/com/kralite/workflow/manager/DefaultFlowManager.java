@@ -1,9 +1,12 @@
 package com.kralite.workflow.manager;
 
 import com.kralite.workflow.common.*;
+import com.kralite.workflow.exception.InitFlowException;
 import com.kralite.workflow.exception.NoSuchLineIdException;
 import com.kralite.workflow.exception.NoSuchNodeIdException;
+import com.kralite.workflow.exception.ParseFlowException;
 import com.kralite.workflow.parser.FlowParser;
+import com.kralite.workflow.parser.ParseStruct;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,9 +22,21 @@ public class DefaultFlowManager implements FlowManager {
 
     private FlowNode startNode;
 
-    public void init(FlowParser parser) {
+    public void init(FlowParser parser, String flowDescriptionContent) {
+        try {
+            ParseStruct parseStruct = parser.parse(flowDescriptionContent);
+            for (Map.Entry<String, NodeConnections> nodeEntry: parseStruct.nodeMap.entrySet()) {
+                this.nodeMap.put(nodeEntry.getKey(), nodeEntry.getValue());
+            }
+            for (Map.Entry<String, FlowLine> lineEntry: parseStruct.lineMap.entrySet()) {
+                this.lineMap.put(lineEntry.getKey(), lineEntry.getValue());
+            }
+            this.startNode = parseStruct.startNode;
+        } catch (ParseFlowException e) {
+            throw new InitFlowException("Parse flow description content error. " + e.getMessage(), e);
+        }
 
-        // todo
+
     }
 
     private void parse(){

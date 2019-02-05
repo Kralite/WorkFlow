@@ -16,7 +16,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * Created by ChenDaLin on 2019/1/28.
  */
 public interface FlowManager {
-    void init(FlowParser parser);
+    void init(FlowParser parser, String FlowDescriptionFile);
     void setStartNode(FlowNode startNode);
     void addNodeConnections(String nodeId, NodeConnections nodeConnections);
     void addLine(String lineId, FlowLine flowLine);

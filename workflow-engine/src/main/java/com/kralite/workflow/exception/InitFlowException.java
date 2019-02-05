@@ -7,4 +7,8 @@ public class InitFlowException extends RuntimeException{
     public InitFlowException(String msg) {
         super(msg);
     }
+
+    public InitFlowException(String msg, Throwable th) {
+        super(msg, th);
+    }
 }

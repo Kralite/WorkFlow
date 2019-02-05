@@ -10,7 +10,6 @@ public abstract class AbstractFlowLine {
     protected String id;
     protected String startNodeId;
     protected String endNodeId;
-    protected boolean isParallel;
     protected List<Pipeline> pipelines;
 
     public String getId() {
@@ -37,13 +36,6 @@ public abstract class AbstractFlowLine {
         this.endNodeId = endNodeId;
     }
 
-    public boolean isParallel() {
-        return isParallel;
-    }
-
-    public void setParallel(boolean parallel) {
-        isParallel = parallel;
-    }
 
     public List<Pipeline> getPipelines() {
         return pipelines;

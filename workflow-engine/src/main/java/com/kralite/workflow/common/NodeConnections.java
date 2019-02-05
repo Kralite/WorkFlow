@@ -6,7 +6,9 @@ import java.util.List;
 /**
  * Created by ChenDaLin on 2019/1/20.
  */
-public class NodeConnections {
+public class
+
+NodeConnections {
     private FlowNode flowNode;
     private List<FlowLine> inlines;
     private List<FlowLine> outlines;
